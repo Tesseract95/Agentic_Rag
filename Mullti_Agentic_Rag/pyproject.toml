@@ -1,0 +1,20 @@
+[project]
+name = "multi_agentic_rag"
+version = "0.1.0"
+description = "Multi-Agent RAG system with LangGraph orchestration across multiple Pinecone indexes for orders, products, and support domains"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "python-dotenv>=1.0.0",
+    "langchain>=0.1.0",
+    "langchain-google-genai>=1.0.0",
+    "langchain-community>=0.0.20",
+    "langchain-pinecone>=0.1.0",
+    "langchain-text-splitters>=0.0.1",
+    "pinecone>=5.0.0",
+    "langgraph>=0.0.20",
+    "sentence-transformers>=2.2.0",
+]
+
+[dependency-groups]
+dev = []
