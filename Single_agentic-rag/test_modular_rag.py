@@ -9,7 +9,7 @@ def main():
     print("="*70)
     
     # Initialize the pipeline
-    rag = ModularRAGPipeline(index_name="nikhil-agent-module-gemini")
+    rag = ModularRAGPipeline(index_name="swastik-agent-module-gemini")
     
     # Show pipeline info
     print("\n📋 Pipeline Configuration:")
@@ -23,7 +23,7 @@ def main():
     print("-" * 70)
     ingest = input("Do you want to re-ingest documents? (y/n): ").lower()
     if ingest == 'y':
-        rag.ingest_documents("sample.txt")
+        rag.ingest_documents("knowledgebase")
     else:
         print("⏭️ Skipping ingestion (using existing indexed data)")
     
@@ -46,9 +46,10 @@ def main():
         result = rag.chat(query)
         
         # Show additional info
-        if 'scores' in result:
+        if result and isinstance(result, dict) and 'num_sources' in result:
             print(f"\n📊 Retrieved {result['num_sources']} sources")
-            print(f"   Score range: {result['min_score']:.4f} - {result['max_score']:.4f}")
+            if 'min_score' in result and 'max_score' in result:
+                print(f"   Score range: {result['min_score']:.4f} - {result['max_score']:.4f}")
 
 if __name__ == "__main__":
     main()

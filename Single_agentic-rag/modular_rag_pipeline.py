@@ -47,13 +47,27 @@ class ModularRAGPipeline:
         print("-" * 60)
         
         # Step 1: Load and preprocess the document
-        chunks = self.preprocessor.process_from_file(file_path)
+        if os.path.isdir(file_path):
+            chunks = []
+            for name in sorted(os.listdir(file_path)):
+                full = os.path.join(file_path, name)
+                if name.endswith(".csv"):
+                    chunks += self.preprocessor.process_from_csv(full)
+                elif name.endswith(".txt"):
+                    chunks += self.preprocessor.process_from_file(full)
+        elif file_path.endswith(".csv"):
+            chunks = self.preprocessor.process_from_csv(file_path)
+        else:
+            chunks = self.preprocessor.process_from_file(file_path)
         
         if not chunks:
             print("❌ No chunks created from document")
             return False
         
         print(f"✅ Created {len(chunks)} chunks")
+
+        # Vector IDs are random UUIDs, so clear old vectors to avoid stale/duplicate data
+        self.vector_store.delete_all_vectors()
         
         # Step 2: Generate embeddings for chunks
         print("\n🔗 Generating embeddings...")
@@ -166,7 +180,7 @@ class ModularRAGPipeline:
 # Example usage
 if __name__ == "__main__":
     # Initialize the pipeline
-    rag = ModularRAGPipeline(index_name="nikhil-agent-module-gemini")
+    rag = ModularRAGPipeline(index_name="swastik-agent-module-gemini")
     
     # Ingest documents
     print("\n📚 Starting document ingestion...")

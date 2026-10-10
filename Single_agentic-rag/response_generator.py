@@ -10,7 +10,7 @@ from typing import Dict
 load_dotenv()
 
 class ResponseGenerator:
-    def __init__(self, model_name="claude-3-5-sonnet-20241022", temperature=0.7):
+    def __init__(self, model_name="claude-haiku-4-5-20251001", temperature=0.7):
         """
         Initialize the response generator
         
@@ -70,7 +70,7 @@ Answer:"""
             # Generate response
             response = self.llm.invoke(prompt)
             
-            return response
+            return getattr(response, 'content', response)
             
         except Exception as e:
             return f"Error generating response: {e}"
@@ -144,7 +144,7 @@ Answer:"""
             # Generate response
             response = self.llm.invoke(custom_prompt)
             
-            return response
+            return getattr(response, 'content', response)
             
         except Exception as e:
             return f"Error generating response: {e}"

@@ -3,6 +3,7 @@ Document Preprocessor Module - Handles text splitting and cleaning
 """
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from typing import List
+import csv
 
 class DocumentPreprocessor:
     def __init__(self, chunk_size=200, chunk_overlap=50):
@@ -102,4 +103,29 @@ class DocumentPreprocessor:
             return []
         except Exception as e:
             print(f"❌ Error processing file: {e}")
+            return []
+
+    def process_from_csv(self, file_path: str) -> List[str]:
+        """
+        Load a CSV file and turn each row into one chunk ("column: value" lines)
+
+        Args:
+            file_path: Path to the CSV file
+
+        Returns:
+            List of chunks, one per row
+        """
+        try:
+            with open(file_path, 'r', encoding='utf-8', newline='') as file:
+                rows = csv.DictReader(file)
+                return [
+                    f"Source: {file_path.split('/')[-1]}\n"
+                    + "\n".join(f"{k}: {v}" for k, v in row.items())
+                    for row in rows
+                ]
+        except FileNotFoundError:
+            print(f"❌ File not found: {file_path}")
+            return []
+        except Exception as e:
+            print(f"❌ Error processing CSV: {e}")
             return []

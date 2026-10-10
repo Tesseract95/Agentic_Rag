@@ -1,7 +1,7 @@
 """
-Embeddings Module - Handles embedding generation using Google Gemini
+Embeddings Module - Handles embedding generation using HuggingFace
 """
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 import os
 from dotenv import load_dotenv
 
